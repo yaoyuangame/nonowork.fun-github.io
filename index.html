@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No Work Play — Games for people with better things to do</title>
+<meta name="description" content="No Work Play makes soft, friendly mobile games that respect your time. No grinding, no daily chores, no guilt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFE9FF;
+    --bg-2:#E7DFFF;
+    --surface:#F8F5FF;
+    --ink:#3A2E5C;
+    --ink-soft:#6E5F96;
+    --lilac:#A78BFA;
+    --lilac-d:#8B6DF0;
+    --mint:#5EEAD4;
+    --mint-d:#2DD4BF;
+    --peach:#FDBA74;
+    --peach-d:#FB923C;
+    --pink:#F9A8D4;
+    --pink-d:#EC4899;
+    --r-lg:34px;
+    --r-md:24px;
+    --r-sm:16px;
+    --clay-out:14px 14px 30px rgba(124,92,180,.18), -10px -10px 24px rgba(255,255,255,.95);
+    --clay-in:inset -3px -3px 8px rgba(124,92,180,.10), inset 3px 3px 8px rgba(255,255,255,.95);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    background-image:
+      radial-gradient(760px 520px at 88% -6%, rgba(249,168,212,.45), transparent 62%),
+      radial-gradient(680px 500px at -8% 18%, rgba(94,234,212,.38), transparent 60%),
+      radial-gradient(720px 560px at 50% 108%, rgba(167,139,250,.35), transparent 62%);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.disp{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:-.01em;line-height:1.16}
+  a{color:var(--lilac-d);text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 26px}
+
+  /* ---------- clay primitives ---------- */
+  .clay{
+    background:linear-gradient(145deg,#FFFFFF,#EAE3FF);
+    border-radius:var(--r-lg);
+    box-shadow:var(--clay-out),var(--clay-in);
+  }
+  .clay-flat{
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    border-radius:var(--r-md);
+    box-shadow:10px 10px 24px rgba(124,92,180,.15), -8px -8px 18px rgba(255,255,255,.95),
+      inset -2px -2px 6px rgba(124,92,180,.07), inset 2px 2px 6px rgba(255,255,255,.9);
+  }
+  .c-lilac{background:linear-gradient(145deg,#C9B8FF,#9B7DF7);
+    box-shadow:12px 12px 26px rgba(110,70,200,.30), -8px -8px 20px rgba(255,255,255,.75),
+      inset -4px -4px 10px rgba(70,35,150,.20), inset 4px 4px 10px rgba(255,255,255,.40)}
+  .c-mint{background:linear-gradient(145deg,#9DF3E4,#4FDCC5);
+    box-shadow:12px 12px 26px rgba(30,150,135,.26), -8px -8px 20px rgba(255,255,255,.75),
+      inset -4px -4px 10px rgba(15,120,105,.18), inset 4px 4px 10px rgba(255,255,255,.45)}
+  .c-peach{background:linear-gradient(145deg,#FFD5A8,#FBA963);
+    box-shadow:12px 12px 26px rgba(200,110,30,.24), -8px -8px 20px rgba(255,255,255,.75),
+      inset -4px -4px 10px rgba(170,85,10,.16), inset 4px 4px 10px rgba(255,255,255,.45)}
+  .c-pink{background:linear-gradient(145deg,#FCC4E0,#F58FC4);
+    box-shadow:12px 12px 26px rgba(190,50,120,.24), -8px -8px 20px rgba(255,255,255,.75),
+      inset -4px -4px 10px rgba(160,30,95,.16), inset 4px 4px 10px rgba(255,255,255,.45)}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:60;padding:16px 0}
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;height:66px;
+    padding:0 10px 0 22px;border-radius:999px;
+    background:rgba(255,255,255,.82);backdrop-filter:blur(16px);
+    box-shadow:8px 8px 22px rgba(124,92,180,.16), -6px -6px 16px rgba(255,255,255,.9),
+      inset -2px -2px 6px rgba(124,92,180,.06), inset 2px 2px 6px rgba(255,255,255,.9);
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.16rem;color:var(--ink)}
+  .dot{
+    width:32px;height:32px;border-radius:50%;flex:none;
+    background:linear-gradient(145deg,#C9B8FF,#9B7DF7);
+    box-shadow:inset -3px -3px 7px rgba(70,35,150,.28), inset 3px 3px 7px rgba(255,255,255,.6), 3px 3px 8px rgba(124,92,180,.30);
+    position:relative;
+  }
+  .dot:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.85);top:7px;left:8px;filter:blur(1px)}
+  .nav ul{display:flex;gap:8px;list-style:none}
+  .nav ul a{font-size:.94rem;font-weight:700;color:var(--ink-soft);padding:9px 16px;border-radius:999px;transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+  .nav ul a:hover{color:var(--ink);background:#fff;box-shadow:4px 4px 12px rgba(124,92,180,.14), -3px -3px 10px rgba(255,255,255,.9)}
+  .nav .cta{
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:.98rem;color:#fff;
+    padding:11px 24px;border-radius:999px;
+    background:linear-gradient(145deg,#B49BFF,#8B6DF0);
+    box-shadow:6px 6px 16px rgba(110,70,200,.34), -4px -4px 12px rgba(255,255,255,.6),
+      inset -3px -3px 8px rgba(70,35,150,.24), inset 3px 3px 8px rgba(255,255,255,.32);
+    transition:transform .14s ease,box-shadow .14s ease;white-space:nowrap;
+  }
+  .nav .cta:hover{transform:translateY(-2px);box-shadow:8px 10px 22px rgba(110,70,200,.38), -4px -4px 12px rgba(255,255,255,.6), inset -3px -3px 8px rgba(70,35,150,.24), inset 3px 3px 8px rgba(255,255,255,.32)}
+  .nav .cta:active{transform:translateY(2px);box-shadow:3px 3px 10px rgba(110,70,200,.30), inset -2px -2px 6px rgba(70,35,150,.30), inset 2px 2px 6px rgba(255,255,255,.22)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:66px 0 74px;position:relative}
+  .hero .wrap{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center}
+  .chip{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:'Fredoka',sans-serif;font-weight:500;font-size:.9rem;color:var(--ink);
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    padding:10px 20px;border-radius:999px;margin-bottom:26px;
+    box-shadow:7px 7px 18px rgba(124,92,180,.16), -5px -5px 14px rgba(255,255,255,.95),
+      inset -2px -2px 5px rgba(124,92,180,.07), inset 2px 2px 5px rgba(255,255,255,.9);
+  }
+  .chip i{width:10px;height:10px;border-radius:50%;background:var(--mint-d);box-shadow:0 0 0 4px rgba(45,212,191,.22)}
+  .hero h1{font-size:clamp(2.3rem,5.6vw,4rem);margin-bottom:24px;max-width:18ch}
+  .hero h1 em{font-style:normal;color:var(--lilac-d)}
+  .hero p.lead{font-size:1.1rem;color:var(--ink-soft);max-width:52ch;margin-bottom:34px;font-weight:500}
+  .btns{display:flex;gap:16px;flex-wrap:wrap}
+  .btn{
+    display:inline-block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:1rem;
+    padding:15px 32px;border-radius:999px;transition:transform .14s ease,box-shadow .14s ease;
+  }
+  .btn-primary{
+    color:#fff;background:linear-gradient(145deg,#B49BFF,#8B6DF0);
+    box-shadow:9px 9px 22px rgba(110,70,200,.34), -6px -6px 16px rgba(255,255,255,.6),
+      inset -4px -4px 9px rgba(70,35,150,.24), inset 4px 4px 9px rgba(255,255,255,.32);
+  }
+  .btn-primary:hover{transform:translateY(-3px)}
+  .btn-primary:active{transform:translateY(2px);box-shadow:4px 4px 12px rgba(110,70,200,.32), inset -3px -3px 8px rgba(70,35,150,.28), inset 3px 3px 8px rgba(255,255,255,.24)}
+  .btn-soft{
+    color:var(--ink);background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:9px 9px 22px rgba(124,92,180,.16), -6px -6px 16px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9);
+  }
+  .btn-soft:hover{transform:translateY(-3px)}
+  .btn-soft:active{transform:translateY(2px)}
+
+  /* hero art */
+  .art{position:relative;height:400px}
+  .blob{position:absolute;border-radius:50%}
+  .b1{width:210px;height:210px;top:24px;left:34px;background:linear-gradient(145deg,#C9B8FF,#9B7DF7);
+    box-shadow:16px 16px 34px rgba(110,70,200,.32), -10px -10px 24px rgba(255,255,255,.7),
+      inset -6px -6px 14px rgba(70,35,150,.22), inset 6px 6px 14px rgba(255,255,255,.40)}
+  .b2{width:150px;height:150px;top:0;right:52px;background:linear-gradient(145deg,#9DF3E4,#4FDCC5);
+    box-shadow:14px 14px 30px rgba(30,150,135,.28), -9px -9px 22px rgba(255,255,255,.7),
+      inset -5px -5px 12px rgba(15,120,105,.20), inset 5px 5px 12px rgba(255,255,255,.45)}
+  .b3{width:132px;height:132px;bottom:52px;right:8px;background:linear-gradient(145deg,#FCC4E0,#F58FC4);
+    box-shadow:14px 14px 30px rgba(190,50,120,.26), -9px -9px 22px rgba(255,255,255,.7),
+      inset -5px -5px 12px rgba(160,30,95,.18), inset 5px 5px 12px rgba(255,255,255,.45)}
+  .b4{width:118px;height:118px;bottom:24px;left:0;background:linear-gradient(145deg,#FFD5A8,#FBA963);
+    box-shadow:14px 14px 30px rgba(200,110,30,.26), -9px -9px 22px rgba(255,255,255,.7),
+      inset -5px -5px 12px rgba(170,85,10,.18), inset 5px 5px 12px rgba(255,255,255,.45)}
+  .b5{width:74px;height:74px;top:186px;left:214px;background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:10px 10px 24px rgba(124,92,180,.20), -7px -7px 18px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9)}
+  .face{position:absolute;top:96px;left:110px;width:60px;height:34px;z-index:3}
+  .face:before,.face:after{content:"";position:absolute;width:11px;height:17px;border-radius:50%;background:rgba(60,35,120,.75);top:0}
+  .face:before{left:4px}.face:after{right:4px}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:6px}
+  .stat{border-radius:var(--r-md);padding:26px 18px;text-align:center;
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:11px 11px 26px rgba(124,92,180,.16), -8px -8px 20px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9)}
+  .stat .n{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.95rem;line-height:1.1;margin-bottom:4px}
+  .stat small{font-size:.84rem;font-weight:700;color:var(--ink-soft);letter-spacing:.02em}
+  .stat:nth-child(1) .n{color:var(--lilac-d)}
+  .stat:nth-child(2) .n{color:var(--mint-d)}
+  .stat:nth-child(3) .n{color:var(--peach-d)}
+  .stat:nth-child(4) .n{color:var(--pink-d)}
+
+  /* ---------- sections ---------- */
+  section{padding:84px 0}
+  .shead{max-width:60ch;margin-bottom:46px}
+  .kicker{
+    display:inline-block;font-family:'Fredoka',sans-serif;font-weight:500;font-size:.92rem;
+    padding:8px 18px;border-radius:999px;margin-bottom:18px;
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:6px 6px 16px rgba(124,92,180,.14), -5px -5px 14px rgba(255,255,255,.95),
+      inset -2px -2px 5px rgba(124,92,180,.06), inset 2px 2px 5px rgba(255,255,255,.9);
+  }
+  .shead h2{font-size:clamp(1.8rem,3.6vw,2.6rem);margin-bottom:16px}
+  .shead p{color:var(--ink-soft);font-weight:500}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .card{border-radius:var(--r-lg);padding:32px 26px;background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:12px 12px 28px rgba(124,92,180,.16), -9px -9px 22px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9);
+    transition:transform .18s ease,box-shadow .18s ease}
+  .card:hover{transform:translateY(-6px);
+    box-shadow:16px 18px 36px rgba(124,92,180,.20), -9px -9px 22px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9)}
+  .orb{width:56px;height:56px;border-radius:50%;margin-bottom:20px;
+    box-shadow:inset -4px -4px 10px rgba(0,0,0,.14), inset 4px 4px 10px rgba(255,255,255,.45), 6px 6px 16px rgba(124,92,180,.22)}
+  .card:nth-child(1) .orb{background:linear-gradient(145deg,#C9B8FF,#9B7DF7)}
+  .card:nth-child(2) .orb{background:linear-gradient(145deg,#9DF3E4,#4FDCC5)}
+  .card:nth-child(3) .orb{background:linear-gradient(145deg,#FFD5A8,#FBA963)}
+  .card h3{font-size:1.24rem;margin-bottom:11px}
+  .card p{color:var(--ink-soft);font-size:.97rem;font-weight:500}
+
+  /* ---------- flagship ---------- */
+  .flag{
+    border-radius:var(--r-lg);overflow:hidden;display:grid;grid-template-columns:1.05fr .95fr;
+    background:linear-gradient(145deg,#FFFFFF,#EAE3FF);
+    box-shadow:16px 16px 38px rgba(124,92,180,.20), -10px -10px 26px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9);
+  }
+  .flag .l{padding:48px 44px}
+  .flag .l h2{font-size:clamp(1.6rem,3.2vw,2.3rem);margin-bottom:18px}
+  .flag .l p{color:var(--ink-soft);margin-bottom:16px;font-weight:500}
+  .flag .r{display:grid;place-items:center;padding:44px}
+  .pill{
+    width:230px;height:230px;border-radius:44% 56% 52% 48% / 50% 44% 56% 50%;
+    background:linear-gradient(145deg,#C9B8FF,#8B6DF0);
+    box-shadow:18px 18px 40px rgba(110,70,200,.34), -10px -10px 26px rgba(255,255,255,.7),
+      inset -7px -7px 16px rgba(70,35,150,.24), inset 7px 7px 16px rgba(255,255,255,.42);
+    display:grid;place-items:center;animation:wobble 7s ease-in-out infinite;
+  }
+  .pill span{font-family:'Fredoka',sans-serif;font-weight:600;font-size:3.6rem;color:rgba(255,255,255,.95);text-shadow:3px 5px 12px rgba(70,35,150,.35)}
+  @keyframes wobble{0%,100%{border-radius:44% 56% 52% 48% / 50% 44% 56% 50%}50%{border-radius:54% 46% 44% 56% / 44% 56% 44% 56%}}
+  .tags{display:flex;flex-wrap:wrap;gap:11px;margin-top:26px}
+  .tag{font-family:'Fredoka',sans-serif;font-weight:500;font-size:.88rem;padding:9px 17px;border-radius:999px;
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:5px 5px 13px rgba(124,92,180,.14), -4px -4px 11px rgba(255,255,255,.95),
+      inset -2px -2px 5px rgba(124,92,180,.07), inset 2px 2px 5px rgba(255,255,255,.9)}
+
+  /* ---------- principles ---------- */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .tile{border-radius:var(--r-md);padding:30px 24px;
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:11px 11px 26px rgba(124,92,180,.16), -8px -8px 20px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9)}
+  .tile .num{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.5rem;margin-bottom:14px;display:block}
+  .tile:nth-child(1) .num{color:var(--lilac-d)}
+  .tile:nth-child(2) .num{color:var(--mint-d)}
+  .tile:nth-child(3) .num{color:var(--peach-d)}
+  .tile:nth-child(4) .num{color:var(--pink-d)}
+  .tile h3{font-size:1.1rem;margin-bottom:9px}
+  .tile p{font-size:.94rem;color:var(--ink-soft);font-weight:500}
+
+  /* ---------- contact ---------- */
+  .contact{
+    border-radius:var(--r-lg);padding:52px 46px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;
+    background:linear-gradient(145deg,#FFFFFF,#EAE3FF);
+    box-shadow:16px 16px 38px rgba(124,92,180,.20), -10px -10px 26px rgba(255,255,255,.95),
+      inset -3px -3px 8px rgba(124,92,180,.08), inset 3px 3px 8px rgba(255,255,255,.9);
+  }
+  .contact h2{font-size:clamp(1.7rem,3.4vw,2.4rem);margin-bottom:16px}
+  .contact p{color:var(--ink-soft);font-weight:500}
+  .boxes{display:flex;flex-direction:column;gap:18px}
+  .mbox{border-radius:var(--r-sm);padding:20px 24px;
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:8px 8px 20px rgba(124,92,180,.15), -6px -6px 16px rgba(255,255,255,.95),
+      inset -2px -2px 6px rgba(124,92,180,.07), inset 2px 2px 6px rgba(255,255,255,.9)}
+  .mbox small{display:block;font-family:'Fredoka',sans-serif;font-weight:500;font-size:.85rem;color:var(--ink-soft);margin-bottom:6px}
+  .mbox a{font-weight:800;font-size:1.02rem;word-break:break-all}
+  .mbox a:hover{text-decoration:underline}
+
+  /* ---------- footer ---------- */
+  footer{padding:40px 0 54px}
+  footer .inner{
+    border-radius:999px;padding:24px 34px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center;
+    background:linear-gradient(145deg,#FFFFFF,#EDE7FF);
+    box-shadow:10px 10px 24px rgba(124,92,180,.15), -8px -8px 20px rgba(255,255,255,.95),
+      inset -2px -2px 6px rgba(124,92,180,.07), inset 2px 2px 6px rgba(255,255,255,.9);
+  }
+  footer .cp{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+  footer nav{display:flex;gap:22px}
+  footer nav a{font-weight:700;font-size:.92rem;color:var(--ink-soft)}
+  footer nav a:hover{color:var(--lilac-d)}
+
+  @media(max-width:980px){
+    .nav ul{display:none}
+    .hero .wrap{grid-template-columns:1fr;gap:34px}
+    .art{height:330px;max-width:420px;margin:0 auto;width:100%}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .cards{grid-template-columns:1fr}
+    .flag{grid-template-columns:1fr}
+    .flag .r{order:-1;padding:32px}
+    .pill{width:180px;height:180px}
+    .tiles{grid-template-columns:repeat(2,1fr)}
+    .contact{grid-template-columns:1fr;padding:36px 26px}
+    section{padding:62px 0}
+    .hero{padding:48px 0 58px}
+    footer .inner{border-radius:var(--r-lg);flex-direction:column;text-align:center}
+  }
+  @media(max-width:560px){
+    .tiles{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <a class="brand" href="/" style="text-decoration:none"><span class="dot"></span>No Work Play</a>
+      <ul>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#game">Game</a></li>
+        <li><a href="#promise">Promise</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a class="cta" href="#contact">Say hi</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="chip"><i></i>Casual games, zero homework</span>
+      <h1>Games for people with <em>better things to do</em>.</h1>
+      <p class="lead">
+        No Work Play makes soft, friendly mobile games that fit around your life instead of
+        demanding one. No energy timers, no chores disguised as gameplay, no guilt for
+        putting the phone down for a week.
+      </p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#game">See the game</a>
+        <a class="btn btn-soft" href="#contact">Get in touch</a>
+      </div>
+    </div>
+    <div class="art">
+      <div class="blob b1"></div>
+      <div class="face"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+      <div class="blob b4"></div>
+      <div class="blob b5"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="n">2020</div><small>Founded</small></div>
+    <div class="stat"><div class="n">25+</div><small>Titles shipped</small></div>
+    <div class="stat"><div class="n">60M+</div><small>Downloads</small></div>
+    <div class="stat"><div class="n">0</div><small>Daily chores</small></div>
+  </div>
+</div>
+
+<section id="studio">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">The studio</span>
+      <h2>We make the game we want on our own phones.</h2>
+      <p>
+        No Work Play is a small independent team. We started because the games we liked playing
+        had turned into part-time jobs — login bonuses, decaying streaks, timed events. So we
+        built the opposite: calm, generous, finished-feeling games you can enjoy in a queue.
+      </p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="orb"></div>
+        <h3>Small and slow</h3>
+        <p>We ship fewer games and support them longer. When something is released, it keeps getting fixes instead of being abandoned for the next launch.</p>
+      </div>
+      <div class="card">
+        <div class="orb"></div>
+        <h3>Kind by design</h3>
+        <p>Difficult levels offer help before they offer a paywall. If a player is stuck, that is our problem to solve, not theirs to pay for.</p>
+      </div>
+      <div class="card">
+        <div class="orb"></div>
+        <h3>Quietly honest</h3>
+        <p>No fake countdowns, no invented discounts, no "limited time" offers that return every week. What you see is what it costs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="game">
+  <div class="wrap">
+    <div class="flag">
+      <div class="l">
+        <span class="kicker">Flagship</span>
+        <h2>NoNoWork — a calm puzzle to fill a quiet minute.</h2>
+        <p>
+          Our flagship title is a gentle logic puzzle with no clock and no fail state. Every board
+          can be finished at your own speed, hints are free and unlimited, and progress saves the
+          instant you touch a piece.
+        </p>
+        <p>
+          It plays completely offline, has no energy system, and never sends a notification asking
+          you to come back. Leave it for a month — it will be exactly where you left it.
+        </p>
+        <div class="tags">
+          <span class="tag">Puzzle</span>
+          <span class="tag">Offline</span>
+          <span class="tag">No fail state</span>
+          <span class="tag">Free to play</span>
+        </div>
+      </div>
+      <div class="r">
+        <div class="pill"><span>N</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="promise">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Our promise</span>
+      <h2>Four things you will never see in our games.</h2>
+    </div>
+    <div class="tiles">
+      <div class="tile">
+        <span class="num">01</span>
+        <h3>No energy bars</h3>
+        <p>You will never be told to wait, or to pay, before you are allowed to keep playing.</p>
+      </div>
+      <div class="tile">
+        <span class="num">02</span>
+        <h3>No streaks</h3>
+        <p>Nothing decays while you are away. Missing a day costs you nothing at all.</p>
+      </div>
+      <div class="tile">
+        <span class="num">03</span>
+        <h3>No forced ads</h3>
+        <p>Every ad is optional and clearly marked. Watching one is a choice you make for a bonus.</p>
+      </div>
+      <div class="tile">
+        <span class="num">04</span>
+        <h3>No data selling</h3>
+        <p>We do not sell personal information. Our privacy policy says exactly what we collect, in plain words.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <h2>Get in touch</h2>
+        <p>
+          Publishers, partners, press and players are all welcome. Bug reports go straight to the
+          people who build the game, and we read everything that reaches the studio inbox.
+        </p>
+      </div>
+      <div class="boxes">
+        <div class="mbox">
+          <small>General &amp; Player Support</small>
+          <a href="mailto:vhfcdhcv@gmail.com">vhfcdhcv@gmail.com</a>
+        </div>
+        <div class="mbox">
+          <small>Business &amp; Publishing</small>
+          <a href="mailto:vhfcdhcv@gmail.com">vhfcdhcv@gmail.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="inner">
+      <div class="cp">© 2026 No Work Play. All rights reserved.</div>
+      <nav>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/terms/">Terms of Service</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
